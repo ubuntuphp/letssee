@@ -6,6 +6,9 @@
 #include <QNetworkAccessManager>
 #include <QUrl>
 #include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QXmlStreamReader>
+#include <QDebug>
 #define googlesuggesturl "http://google.com/complete/search?output=toolbar&q=%1"
 
 class suggestcompleter : public QCompleter
@@ -19,7 +22,10 @@ signals:
 public slots:
     void suggest(QString query);
 private:
+    QStringListModel * model;
     QNetworkAccessManager * manager;
+private slots:
+    void handlenetworkdata(QNetworkReply * networkreply);
 };
 
 #endif // SUGGESTCOMPLETER_H
