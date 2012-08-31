@@ -15,6 +15,9 @@
   </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
    <property name="movable">
     <bool>true</bool>
    </property>
@@ -41,6 +44,8 @@
      <string>history</string>
     </property>
     <addaction name="actionRestore_previous_session"/>
+    <addaction name="actionShow_all_history"/>
+    <addaction name="actionClear_all_history"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -54,7 +59,21 @@
     </property>
     <addaction name="actionAdd_to_home_page"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>view</string>
+    </property>
+    <addaction name="actionTool_bar"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>edit</string>
+    </property>
+    <addaction name="actionSettings"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
    <addaction name="menuHistory"/>
    <addaction name="menuPage"/>
   </widget>
@@ -83,7 +102,30 @@
   </action>
   <action name="actionAdd_to_home_page">
    <property name="text">
-    <string>add to home page</string>
+    <string>add/remove to home page</string>
+   </property>
+  </action>
+  <action name="actionTool_bar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>tool bar</string>
+   </property>
+  </action>
+  <action name="actionShow_all_history">
+   <property name="text">
+    <string>show all history</string>
+   </property>
+  </action>
+  <action name="actionClear_all_history">
+   <property name="text">
+    <string>clear all history</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>settings</string>
    </property>
   </action>
  </widget>

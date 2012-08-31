@@ -1,0 +1,12 @@
+#include "settings.h"
+
+settings::settings(QWidget *parent) :
+    QWidget(parent)
+{
+    settingstab = new QTabWidget();
+    searchtab = new QWidget();
+    searchformlayout = new QFormLayout(searchtab);
+    searchonkeyup = new QLabel("search when text editing is finished");
+    choosekeyup = new QCheckBox();
+    searchformlayout->addRow(searchonkeyup , choosekeyup);
+}

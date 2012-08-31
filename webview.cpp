@@ -1,4 +1,5 @@
 #include "webview.h"
+#include "browserapplication.h"
 #include <QMessageBox>
 webview::webview(QWidget *parent) :
     QWebView(parent)
@@ -13,6 +14,8 @@ webview::webview(QWidget *parent) :
     settings()->setAttribute(QWebSettings::JavaEnabled , true);
     settings()->setAttribute(QWebSettings::LocalStorageEnabled , true);
     settings()->enablePersistentStorage(QApplication::applicationDirPath());
+    QObject::connect(this , SIGNAL(urlChanged(QUrl)) , this , SLOT(addhistory(QUrl)));
+    QObject::connect(this , SIGNAL(titleChanged(QString)) , this , SLOT(updatetitle(QString)));
 }
 void webview::contextMenuEvent(QContextMenuEvent * event)
 {
@@ -79,4 +82,12 @@ QWebView * webview::createWindow(QWebPage::WebWindowType type)
         emit openlinkinnewtab(webView);
     }
     return webView;
+}
+void webview::addhistory(QUrl url)
+{
+    browserapplication::addhistory(url.toString() , title());
+}
+void webview::updatetitle(QString newtitle)
+{
+    browserapplication::updatehistory(url().toString() , newtitle);
 }

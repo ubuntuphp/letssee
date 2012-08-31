@@ -1,8 +1,8 @@
 #include <QtGui/QApplication>
-#include "mainwindow.h"
 #include <QWebSettings>
 #include <QDir>
 #include <QDesktopServices>
+#include "browserapplication.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -10,7 +10,6 @@ int main(int argc, char *argv[])
     a.setOrganizationName("open devs");
     QWebSettings::setIconDatabasePath(a.applicationDirPath());
     QWebSettings::setOfflineStoragePath(a.applicationDirPath());
-    MainWindow w;
-    w.show();
+    browserapplication * app = new browserapplication();
     return a.exec();
 }

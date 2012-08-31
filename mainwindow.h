@@ -12,9 +12,9 @@
 #include <QWebHistory>
 #include <QSettings>
 #include "searchenginebox.h"
+#include "locaionbar.h"
 #include <QDebug>
 #include <QFileInfo>
-#include "historymanager/historymanager.h"
 namespace Ui {
 class MainWindow;
 }
@@ -30,16 +30,16 @@ public:
     QSettings * settings;
     searchbar * searchedit;
     QStringList closedtabs;
-    QLineEdit * locationbar;
+    locaionbar * locationbar;
     webview * webpage;
     tabwidget * tabs;
     QAction * forwardAction;
     QAction * backAction;
     QAction * stopAction;
     QAction * reloadAction;
+    QAction * homeaction;
     QWebHistory * history;
     QMenu * recentlyclosedtabs;
-    historymanager * manager;
 public slots:
     void addrecentlyclosedtabs(webview *page);
     void loadurl();
@@ -67,12 +67,22 @@ public slots:
     void updateprogress(int i);
     void setfinished();
     void showlink(QString link);
+    void savewindowstate();
+    void restorewindowstate();
 private slots:
     void on_actionNew_tab_triggered();
 
     void on_actionRestore_previous_session_triggered();
 
     void on_actionAdd_to_home_page_triggered();
+
+    void on_actionTool_bar_triggered();
+
+    void on_actionShow_all_history_triggered();
+
+    void on_actionClear_all_history_triggered();
+
+    void on_actionSettings_triggered();
 
 private:
     Ui::MainWindow *ui;

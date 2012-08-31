@@ -2,6 +2,7 @@
 #define SEARCHBAR_H
 
 #include <QLineEdit>
+#include "suggestcompleter.h"
 
 class searchbar : public QLineEdit
 {

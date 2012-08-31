@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui webkit sql
+QT       += core gui webkit sql network
 
 TARGET = letssee
 TEMPLATE = app
@@ -20,7 +20,12 @@ SOURCES += main.cpp\
     searchbar.cpp \
     searchenginebox.cpp \
     historymanager/historymanager.cpp \
-    tabbar.cpp
+    settingseditor.cpp \
+    browserapplication.cpp \
+    locaionbar.cpp \
+    searchenginemanager.cpp \
+    cookiejar/cookiejar.cpp \
+    suggestcompleter.cpp
 
 HEADERS  += mainwindow.h \
     webview.h \
@@ -29,7 +34,12 @@ HEADERS  += mainwindow.h \
     searchbar.h \
     searchenginebox.h \
     historymanager/historymanager.h \
-    tabbar.h
+    settingseditor.h \
+    browserapplication.h \
+    locaionbar.h \
+    searchenginemanager.h \
+    cookiejar/cookiejar.h \
+    suggestcompleter.h
 
 FORMS    += mainwindow.ui
 

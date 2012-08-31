@@ -1,3 +1,4 @@
+
 #ifndef WEBVIEW_H
 #define WEBVIEW_H
 
@@ -21,6 +22,8 @@ signals:
 public slots:
     void contextMenuEvent(QContextMenuEvent * event);
 private slots:
+    void addhistory(QUrl url);
+    void updatetitle(QString newtitle);
 private:
 protected:
     virtual QWebView * createWindow(QWebPage::WebWindowType type);

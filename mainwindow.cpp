@@ -1,14 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
+#include "browserapplication.h"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    settings = new QSettings("open devs" , "cute browser");
+    settings = browserapplication::settings();
     ui->setupUi(this);
-    showMaximized();
-    locationbar = new QLineEdit();
+    locationbar = new locaionbar();
     tabs = new tabwidget();
     searchedit = new searchbar();
     webpage = startuptabs();
@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     backAction = new QAction(QIcon::fromTheme("go-previous") , tr("back") , this);
     stopAction = new QAction(QIcon::fromTheme("process-stop") , tr("stop") , this);
     reloadAction = new QAction(QIcon::fromTheme("view-refresh") , tr("reload") , this);
+    homeaction = new QAction(QIcon::fromTheme("go-home") , tr("home page") , this);
     ui->mainToolBar->addAction(forwardAction);
     ui->mainToolBar->addAction(backAction);
     ui->mainToolBar->addAction(stopAction);
@@ -24,11 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->addWidget(locationbar);
     ui->mainToolBar->addWidget(searchbox);
     ui->mainToolBar->addWidget(searchedit);
+    ui->mainToolBar->addAction(homeaction);
     ui->mainToolBar->setFixedHeight(30);
     recentlyclosedtabs = new QMenu("recently closed tabs");
     ui->menuHistory->addMenu(recentlyclosedtabs);
     searchedit->setFixedWidth(300);
-    manager = new historymanager();
     setCentralWidget(tabs);
     QObject::connect(forwardAction , SIGNAL(triggered()) , this , SLOT(forward()));
     QObject::connect(backAction , SIGNAL(triggered()) , this , SLOT(back()));
@@ -43,11 +44,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(webpage , SIGNAL(urlChanged(QUrl)) , this , SLOT(updateaction()));
     QObject::connect(webpage , SIGNAL(openlinkinnewtab(webview*)) , this , SLOT(newtab(webview*)));
     QObject::connect(webpage->page() , SIGNAL(linkHovered(QString,QString,QString)) , this , SLOT(showlink(QString)));
-    QObject::connect(searchedit , SIGNAL(textEdited(QString)) , this , SLOT(search(QString)));
+    if(settings->contains("search on keyup") && settings->value("search on keyup") == true)
+    {
+        QObject::connect(searchedit , SIGNAL(textEdited(QString)) , this , SLOT(search(QString)));
+    }
     QObject::connect(searchedit , SIGNAL(returnPressed()) , this , SLOT(search()));
     QObject::connect(tabs , SIGNAL(openlinkinnewtab(QString)) , this , SLOT(newtab(QString)));
     QObject::connect(tabs , SIGNAL(opennewtab()) , this , SLOT(newtab()));
     QObject::connect(recentlyclosedtabs , SIGNAL(triggered(QAction*)) , this , SLOT(openrecentlyclosedtab(QAction*)));
+    restorewindowstate();
 }
 MainWindow::~MainWindow()
 {
@@ -56,6 +61,12 @@ MainWindow::~MainWindow()
 void MainWindow::loadurl()
 {
     QString loadurl = locationbar->text();
+    if(QUrl(loadurl).isLocalFile())
+    {
+        qDebug() << "yeyeye";
+        this->loadurl(loadurl);
+        return;
+    }
     if(cuteurl::is_url(loadurl))
     {
         loadurl = cuteurl::complete_url(loadurl);
@@ -260,7 +271,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         lastsession.append(qobject_cast<webview *>(tabs->widget(i))->url().toString());
     }
     settings->setValue("last session" , lastsession);
-    close();
+    savewindowstate();
 }
 void MainWindow::restoreprevioussession()
 {
@@ -283,6 +294,77 @@ void MainWindow::on_actionAdd_to_home_page_triggered()
 void MainWindow::addtohomepages(QString url)
 {
     QStringList homepages = settings->value("home page").toStringList();
+    if(homepages.contains(url))
+    {
+        qDebug() << url;
+        qDebug() << homepages.removeOne(url);
+    }
+    else
+    {
     homepages.append(url);
+    }
     settings->setValue("home page",homepages);
+}
+void MainWindow::savewindowstate()
+{
+    settings->beginGroup("gui state");
+    if(isMaximized())
+    {
+        settings->setValue("maximized" , true);
+    }
+    else
+    {
+        settings->remove("maximized");
+        settings->setValue("window width" , width());
+        settings->setValue("window height" , height());
+    }
+    qDebug() << ui->mainToolBar->isVisible();
+    settings->setValue("tool bar visible" , ui->mainToolBar->isVisible());
+    settings->endGroup();
+}
+void MainWindow::restorewindowstate()
+{
+    settings->beginGroup("gui state");
+    if(settings->contains("maximized"))
+    {
+        showMaximized();
+    }
+    else if(settings->contains("window width") && settings->contains("window height"))
+    {
+    resize(settings->value("window width").toInt() , settings->value("window height").toInt());
+    }
+    if(settings->contains("tool bar visible"))
+    {
+        ui->actionTool_bar->setChecked(settings->value("tool bar visible").toBool());
+        ui->mainToolBar->setVisible(settings->value("tool bar visible").toBool());
+    }
+    settings->endGroup();
+}
+void MainWindow::on_actionTool_bar_triggered()
+{
+    if(ui->mainToolBar->isVisible())
+    {
+    ui->mainToolBar->hide();
+    ui->actionTool_bar->setChecked(false);
+    }
+    else
+    {
+    ui->mainToolBar->show();
+    ui->actionTool_bar->setChecked(true);
+    }
+}
+
+void MainWindow::on_actionShow_all_history_triggered()
+{
+    browserapplication::gethistorymanager()->showhistory();
+}
+
+void MainWindow::on_actionClear_all_history_triggered()
+{
+    browserapplication::gethistorymanager()->clearallhistory();
+}
+
+void MainWindow::on_actionSettings_triggered()
+{
+    browserapplication::launchsettingseditor();
 }
