@@ -3,5 +3,4 @@
 locaionbar::locaionbar(QWidget *parent) :
     QLineEdit(parent)
 {
-    setCompleter(browserapplication::historycompletor());
 }

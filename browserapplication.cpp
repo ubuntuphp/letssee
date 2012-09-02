@@ -28,7 +28,4 @@ void browserapplication::updatehistory(QString url, QString newtitle)
 {
     hmanager->updatehistory(url , newtitle);
 }
-QCompleter *  browserapplication::historycompletor()
-{
-    hmanager->historycompletor();
-}
+

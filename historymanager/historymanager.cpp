@@ -22,6 +22,11 @@ historymanager::historymanager(QObject *parent) :
                              "url varchar(1000),time DATETIME) "
                              );
     }
+    if(database.tables().indexOf("eachhistory") == -1)
+    {
+        qDebug() << "database eachhistory does not exists";
+        qDebug() << query->exec("create table eachhistory(id integer primary key,title varchar(1000)url varchar(1000)time DATETIME visits integer)");
+    }
     tablemodel->setTable("history");
     tablemodel->setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
@@ -49,7 +54,7 @@ bool historymanager::showhistory()
 }
 bool historymanager::clearallhistory()
 {
-    tablemodel->clear();
+    query->exec("DELETE FROM history");
 }
 bool historymanager::addhistory(QWebHistory  * history)
 {
@@ -63,8 +68,4 @@ bool historymanager::addhistory(QWebHistory  * history)
 bool historymanager::updatehistory(QString url ,QString newtitle)
 {
     return query->exec(QString("UPDATE history set title='%1' WHERE url='%2'").arg(newtitle,url));
-}
-QCompleter * historymanager::historycompletor()
-{
-    return new QCompleter();
 }

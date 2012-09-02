@@ -31,7 +31,6 @@ public slots:
     bool addhistory(QWebHistory *history);
     bool showhistory();
     bool clearallhistory();
-    QCompleter * historycompletor();
 };
 
 #endif // HISTORYMANAGER_H

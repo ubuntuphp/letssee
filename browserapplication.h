@@ -18,7 +18,6 @@ public slots:
     static historymanager * gethistorymanager();
     static void addhistory(QString url , QString title);
     static void updatehistory(QString url , QString newtitle);
-    static QCompleter * historycompletor();
     static QSettings *settings();
 private:
     static QSettings * globalsettings;

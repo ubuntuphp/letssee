@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     locaionbar.cpp \
     searchenginemanager.cpp \
     cookiejar/cookiejar.cpp \
-    suggestcompleter.cpp
+    suggestcompleter.cpp \
+    historymanager/historycompleter.cpp
 
 HEADERS  += mainwindow.h \
     webview.h \
@@ -39,7 +40,8 @@ HEADERS  += mainwindow.h \
     locaionbar.h \
     searchenginemanager.h \
     cookiejar/cookiejar.h \
-    suggestcompleter.h
+    suggestcompleter.h \
+    historymanager/historycompleter.h
 
 FORMS    += mainwindow.ui
 

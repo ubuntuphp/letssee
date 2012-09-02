@@ -33,7 +33,6 @@ void suggestcompleter::handlenetworkdata(QNetworkReply *networkreply)
                 }
             }
         }
-        qDebug() << wordlist;
     model->setStringList(wordlist);
     popup()->setFocus();
     popup()->show();
